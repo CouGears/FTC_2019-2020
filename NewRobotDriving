@@ -20,7 +20,8 @@ public class NewRobotDriving extends LinearOpMode{
     private DcMotor motorBL;
     private DcMotor motorBR;
     private DcMotor motorFR;
-    private DcMotor motorArm;
+    private DcMotor armAngle;
+    private DcMotor armSlide;
     private CRServo servo1;
     private CRServo servo2;
     BNO055IMU imu;
@@ -32,21 +33,26 @@ public class NewRobotDriving extends LinearOpMode{
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorFR = hardwareMap.get(DcMotor.class, "motorFR");
-        motorArm = hardwareMap.get(DcMotor.class, "motorArm");
-        servo1 = hardwareMap.get(CRServo.class, "servo1");
-        servo2 = hardwareMap.get(CRServo.class, "servo2");
+        armAngle = hardwareMap.get(DcMotor.class, "armAngle");
+        armSlide = hardwareMap.get(DcMotor.class, "armSlide");
+        servoLS = hardwareMap.get(CRServo.class, "servoLS");
+        servoRS = hardwareMap.get(CRServo.class, "servoRS");
+        servoLR = hardwareMap.get(Servo.class, "servoLR");
+        servoRR = hardwareMap.get(Servo.class, "servoRR");
         
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         
         motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armAngle.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -122,7 +128,9 @@ public class NewRobotDriving extends LinearOpMode{
 
             double heading = (angles.firstAngle)%360;
             
-            motorFL.setPower(gamepad2.left_stick_y);
+            armAngle.setPower(gamepad2.left_stick_y);
+            armSlide.setPower(gamepad2.right_stick_y);
+            
         }
     }
 }
