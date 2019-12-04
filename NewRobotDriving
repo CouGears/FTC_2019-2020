@@ -51,8 +51,8 @@ public class NewRobotDriving extends LinearOpMode{
         servoRS = hardwareMap.get(Servo.class, "servoRS");
         servoLR = hardwareMap.get(Servo.class, "servoLR");
         servoRR = hardwareMap.get(Servo.class, "servoRR");
-        intakeL = hardwareMap.crservo.get("intakeL");
-        intakeR = hardwareMap.crservo.get("intakeR");
+        intakeL = hardwareMap.get(CRServo.class, "intakeL");
+        intakeR = hardwareMap.get(CRServo.class, "intakeR");
         angleL = hardwareMap.get(Servo.class, "angleL");
         angleR = hardwareMap.get(Servo.class, "angleR");
         
@@ -83,11 +83,18 @@ public class NewRobotDriving extends LinearOpMode{
         imu.initialize(parameters);
         
         telemetry.addData("Status", "Initialized");
+        telemetry.addData("intakeL", intakeL.getPower());
         telemetry.update();
         
         waitForStart();
         
         while (opModeIsActive()) {
+            
+            
+            telemetry.addData("intakeL", intakeL.getPower() );
+            telemetry.addData("intakeR", intakeR.getPower() );
+        telemetry.update();
+            
             if(gamepad1.a){
                 x = 0;
             }
@@ -105,36 +112,36 @@ public class NewRobotDriving extends LinearOpMode{
             }
             
             if(x == 0){ 
-                motorFL.setPower(((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x)));
-                motorBL.setPower(((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x)/4 + (this.gamepad1.right_stick_x)));
+                motorFL.setPower(((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x)));
+                motorBL.setPower(((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x)));
                 motorBR.setPower(-((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (-this.gamepad1.right_stick_x)));
-                motorFR.setPower(-((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x)/4 + (-this.gamepad1.right_stick_x)));
+                motorFR.setPower(-((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (-this.gamepad1.right_stick_x)));
             }
             
             else if(x == 1){ 
-                motorFL.setPower(((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/4);
-                motorBL.setPower(((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x)/2 + (this.gamepad1.right_stick_x))/4);
-                motorBR.setPower(-((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x)*2 + (-this.gamepad1.right_stick_x))/4);
-                motorFR.setPower(-((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x)/4 + (-this.gamepad1.right_stick_x))/4);
+                motorFL.setPower(((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/4);
+                motorBL.setPower(((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/4);
+                motorBR.setPower(-((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (-this.gamepad1.right_stick_x))/4);
+                motorFR.setPower(-((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (-this.gamepad1.right_stick_x))/4);
             }
             
             else if(x == 2){ 
-                motorFL.setPower(((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/8);
-                motorBL.setPower(((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/8);
-                motorBR.setPower(-((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x)*2 + (-this.gamepad1.right_stick_x))/8);
-                motorFR.setPower(-((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x)/4 + (-this.gamepad1.right_stick_x))/8);
+                motorFL.setPower(((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/8);
+                motorBL.setPower(((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/8);
+                motorBR.setPower(-((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (-this.gamepad1.right_stick_x))/8);
+                motorFR.setPower(-((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (-this.gamepad1.right_stick_x))/8);
             }
             
             else if(x == 3){ 
-                motorFL.setPower(((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/16);
-                motorBL.setPower(((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x)/2 + (this.gamepad1.right_stick_x))/16);
-                motorBR.setPower(-((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x)*2 + (-this.gamepad1.right_stick_x))/16);
-                motorFR.setPower(-((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x)/4 + (-this.gamepad1.right_stick_x))/16);
+                motorFL.setPower(((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/16);
+                motorBL.setPower(((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (this.gamepad1.right_stick_x))/16);
+                motorBR.setPower(-((this.gamepad1.left_stick_y) + (this.gamepad1.left_stick_x) + (-this.gamepad1.right_stick_x))/16);
+                motorFR.setPower(-((this.gamepad1.left_stick_y) + (-this.gamepad1.left_stick_x) + (-this.gamepad1.right_stick_x))/16);
             }
             
             if (gamepad2.a) {
                 servoLS.setPosition(0);
-                servoRS.setPosition(0);
+                servoRS.setPosition(1);
             }
             
             else {
@@ -174,15 +181,15 @@ public class NewRobotDriving extends LinearOpMode{
             armAngle.setPower(gamepad2.left_stick_y/10);
             armSlide.setPower(-gamepad2.right_stick_y/10);
             
-            while (gamepad2.right_trigger > 0) {
+            while (gamepad2.left_trigger > 0) {
                 if (latch2) {
-                    angleL.setPosition(0);
-                    angleR.setPosition(.5);
+                    angleL.setPosition(.2);
+                    angleR.setPosition(.8);
                 }
                 
                 else {
-                    angleL.setPosition(.5);
-                    angleR.setPosition(1);
+                    angleL.setPosition(.7);
+                    angleR.setPosition(.3);
                 }
                 
                 test2 = true;
@@ -193,15 +200,15 @@ public class NewRobotDriving extends LinearOpMode{
                 test2 = false;
             }
             
-            while (gamepad2.left_trigger > 0) {
+            while (gamepad2.right_trigger > 0) {
                 if (latch3) {
-                    intakeL.setPower(0);
-                    intakeR.setPower(0);
+                    intakeL.setPower(.8);
+                    intakeR.setPower(-.8);
                 }
                 
                 else {
-                    intakeL.setPower(.5);
-                    intakeR.setPower(-.5);
+                    intakeL.setPower(0);
+                    intakeR.setPower(0);
                 }
                 
                 test3 = true;
