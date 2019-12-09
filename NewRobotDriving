@@ -30,6 +30,7 @@ public class NewRobotDriving extends LinearOpMode{
     private CRServo intakeR;
     private Servo angleL;
     private Servo angleR;
+    private Servo export;
     BNO055IMU imu;
     int x = 0;
     boolean latch1 = true;
@@ -38,6 +39,8 @@ public class NewRobotDriving extends LinearOpMode{
     boolean test2 = false;
     boolean latch3 = true;
     boolean test3 = false;
+    boolean latch4 = true;
+    boolean test4 = false;
     
     @Override
     public void runOpMode() {
@@ -55,6 +58,7 @@ public class NewRobotDriving extends LinearOpMode{
         intakeR = hardwareMap.get(CRServo.class, "intakeR");
         angleL = hardwareMap.get(Servo.class, "angleL");
         angleR = hardwareMap.get(Servo.class, "angleR");
+        export = hardwareMap.get(Servo.class, "export");
         
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -82,8 +86,11 @@ public class NewRobotDriving extends LinearOpMode{
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         
+        angleL.setPosition(.7);
+        angleR.setPosition(.3);
+        servoLR.setPosition(1);
+        
         telemetry.addData("Status", "Initialized");
-        telemetry.addData("intakeL", intakeL.getPower());
         telemetry.update();
         
         waitForStart();
@@ -93,7 +100,7 @@ public class NewRobotDriving extends LinearOpMode{
             
             telemetry.addData("intakeL", intakeL.getPower() );
             telemetry.addData("intakeR", intakeR.getPower() );
-        telemetry.update();
+            telemetry.update();
             
             if(gamepad1.a){
                 x = 0;
@@ -145,19 +152,28 @@ public class NewRobotDriving extends LinearOpMode{
             }
             
             else {
-                servoLS.setPosition(.5);
-                servoRS.setPosition(.5);
-            }
-            
-            if (gamepad2.y) {
-                servoRR.setPosition(.5);
-            }
-            
-            else {
-                servoRR.setPosition(1);
+                servoLS.setPosition(.6);
+                servoRS.setPosition(.4);
             }
             
             while (gamepad2.x) {
+                if (latch3) {
+                    servoRR.setPosition(1);
+                }
+                
+                else {
+                    servoRR.setPosition(.8);
+                }
+                
+                test3 = true;
+            }
+            
+            if (test3) {
+                latch3 = !latch3;
+                test3 = false;
+            }
+            
+            while (gamepad2.y) {
                 if (latch1) {
                     servoLR.setPosition(.5);
                 }
@@ -178,18 +194,27 @@ public class NewRobotDriving extends LinearOpMode{
 
             double heading = (angles.firstAngle)%360;
             
-            armAngle.setPower(gamepad2.left_stick_y/10);
+            armAngle.setPower(-gamepad2.left_stick_y/5);
             armSlide.setPower(-gamepad2.right_stick_y/10);
             
             while (gamepad2.left_trigger > 0) {
                 if (latch2) {
                     angleL.setPosition(.2);
                     angleR.setPosition(.8);
+                    intakeL.setPower(.8);
+                    intakeR.setPower(-.8);
+                    servoRR.setPosition(.8);
+                    latch3 = true;
+                    latch4 = false;
                 }
                 
                 else {
-                    angleL.setPosition(.7);
-                    angleR.setPosition(.3);
+                    angleL.setPosition(.4);
+                    angleR.setPosition(.6);
+                    intakeL.setPower(0);
+                    intakeR.setPower(0);
+                    latch4 = true;
+                    
                 }
                 
                 test2 = true;
@@ -200,23 +225,37 @@ public class NewRobotDriving extends LinearOpMode{
                 test2 = false;
             }
             
-            while (gamepad2.right_trigger > 0) {
-                if (latch3) {
-                    intakeL.setPower(.8);
-                    intakeR.setPower(-.8);
+            while (gamepad2.right_trigger > 0){
+                if (latch4) {
+                    angleL.setPosition(.2);
+                    angleR.setPosition(.8);
+                    intakeL.setPower(-.8);
+                    intakeR.setPower(.8);
+                    latch2 = false;
                 }
                 
                 else {
+                    angleL.setPosition(.4);
+                    angleR.setPosition(.6);
                     intakeL.setPower(0);
                     intakeR.setPower(0);
+                    latch2 = true;
                 }
                 
-                test3 = true;
+                test4 = true;
             }
             
-            if (test3) {
-                latch3 = !latch3;
-                test3 = false;
+            if (test4) {
+                latch4 = !latch4;
+                test4 = false;
+            }
+            
+            if (gamepad2.left_bumper) {
+                export.setPosition(.5);
+            }
+            
+            else {
+                export.setPosition(1);
             }
         }
     }
