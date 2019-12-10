@@ -250,6 +250,7 @@ public class AutonMethods {
         }
         
         clampDown = !clampDown;
+        counter++;
     }
     
     public void sleep(long sleep) {
@@ -260,6 +261,28 @@ public class AutonMethods {
             tele.addLine("Failed Sleep");
             tele.update();
         }
+        
+        counter++;
+    }
+    
+    public void intake() {
+        if (intakeOn) {
+            intakeL.setPower(.5);
+            intakeR.setPower(-.5);
+        }
+        
+        else {
+            intakeL.setPower(-.5);
+            intakeR.setPower(.5);
+        }
+        
+        intakeOn = !intakeOn;
+        counter++;
+    }
+    
+    public void intakeOff() {
+        intakeL.setPower(0);
+        intakeR.setPower(0);
         
         counter++;
     }
