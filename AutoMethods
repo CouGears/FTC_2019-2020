@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -25,18 +27,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.Locale;
 import android.app.Activity;
 
-public class AutoMethods {
+public class AutonMethods {
     
-    public AutoMethods() {}
+    public AutonMethods() {
+        
+    }
     
-    private DcMotor motorFL, motorBL, motorBR, motorFR;
-    private Servo servoLS, servoRS, servoLR, servoRR, angleL, angleR;
-    private CRServo intakeL, intakeR;
-    private HardwareMap map;
-    private Telemetry tele;
+    public static DcMotor motorFL, motorBL, motorBR, motorFR;
+    static Servo servoLS, servoRS, servoLR, servoRR, angleL, angleR;
+    static CRServo intakeL, intakeR;
+    HardwareMap map;
+    Telemetry tele;
     
     private double speed;
     private boolean clampDown = true;
+    public int counter = 0;
     
     float hsvValues[] = {0F, 0F, 0F};
     final float values[] = hsvValues;
@@ -46,7 +51,7 @@ public class AutoMethods {
         changeRunMode(DcMotor.RunMode.RUN_TO_POSITION);
         
         if (direction.equals("front")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(-distance - 25);
                 motorBL.setTargetPosition(-distance - 25);
                 motorFR.setTargetPosition(distance + 25);
@@ -65,7 +70,7 @@ public class AutoMethods {
         }
         
         else if (direction.equals("back")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(distance + 25);
                 motorBL.setTargetPosition(distance + 25);
                 motorFR.setTargetPosition(-distance - 25);
@@ -84,7 +89,7 @@ public class AutoMethods {
         }
         
         else if (direction.equals("right")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(distance + 25);
                 motorBL.setTargetPosition(-distance - 25);
                 motorFR.setTargetPosition(distance + 25);
@@ -103,7 +108,7 @@ public class AutoMethods {
         }
         
         else if (direction.equals("left")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(-distance - 25);
                 motorBL.setTargetPosition(distance + 25);
                 motorFR.setTargetPosition(-distance - 25);
@@ -122,7 +127,7 @@ public class AutoMethods {
         }
         
         else if (direction.equals("turn_left")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(-distance - 25);
                 motorBL.setTargetPosition(-distance - 25);
                 motorFR.setTargetPosition(-distance - 25);
@@ -141,7 +146,7 @@ public class AutoMethods {
         }
         
         else if (direction.equals("turn_right")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(distance + 25);
                 motorBL.setTargetPosition(distance + 25);
                 motorFR.setTargetPosition(distance + 25);
@@ -160,16 +165,17 @@ public class AutoMethods {
         }
         
         else if (direction.equals("stop")) {
-            while (opModeIsActive()) {
-                motorFL.setTargetPosition(motorFL.getCurrentPosition());
-                motorBL.setTargetPosition(motorBL.getCurrentPosition());
-                motorFR.setTargetPosition(motorFR.getCurrentPosition());
-                motorBR.setTargetPosition(motorBR.getCurrentPosition());
-                speed(0);
-            }
+            motorFL.setTargetPosition(motorFL.getCurrentPosition());
+            motorBL.setTargetPosition(motorBL.getCurrentPosition());
+            motorFR.setTargetPosition(motorFR.getCurrentPosition());
+            motorBR.setTargetPosition(motorBR.getCurrentPosition());
+            speed(0);
         }
         
-        changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        if (!(Math.abs(motorFL.getCurrentPosition()) < distance)) {
+            counter++;
+            changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
     }
     
     public void speedIncrement(int distance) {
@@ -180,12 +186,8 @@ public class AutoMethods {
         else if (distance < 1600) speed = .4;
         else if (distance < 1800) speed = .45;
         else speed = .5;
-        
-        tele.addData("Speed: " + speed);
-        tele.update();
     }
     
-    @Override
     public void init(HardwareMap map, Telemetry tele, boolean auton) {
         
         motorFL = map.get(DcMotor.class, "motorFL");
@@ -254,8 +256,11 @@ public class AutoMethods {
         try {
             Thread.sleep(sleep);
         }
-        catch (InerruptedExcetrion e) {
-            tele.addData("Failed Sleep");
+        catch (InterruptedException e) {
+            tele.addLine("Failed Sleep");
+            tele.update();
         }
+        
+        counter++;
     }
 }
