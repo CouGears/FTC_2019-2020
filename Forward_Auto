@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -44,31 +43,30 @@ public class Forward_Auto extends LinearOpMode {
     private CRServo intakeR;
     private Servo angleL;
     private Servo angleR;
-    int currentArm = 0, currentFL = 0, currentBL = 0, currentFR = 0, currentBR = 0;
+    private double speed;
     
     float hsvValues[] = {0F, 0F, 0F};
     final float values[] = hsvValues;
     final double SCALE_FACTOR = 255;
     
-    public void motors (String direction, int distance, double speed) {
-        if (direction.equals("arm")) {
-            while ((Math.abs(armAngle.getCurrentPosition() - currentArm) < Math.abs(distance)) && opModeIsActive()) {
-                armAngle.setTargetPosition(currentArm + distance);
-                armAngle.setPower(speed);
-            }
-            currentArm = armAngle.getCurrentPosition();
-        }
+    public void motors (String direction, int distance) {
+        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         
-        else if (direction.equals("front")) {
-            while ((Math.abs(motorFL.getCurrentPosition() - currentFL) < distance) && opModeIsActive()) {
-                motorFL.setTargetPosition(currentFL - distance);
+        if (direction.equals("front")) {
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+                motorFL.setTargetPosition(-distance - 25);
                 motorFL.setPower(speed);
-                motorBL.setTargetPosition(currentBL - distance);
+                motorBL.setTargetPosition(-distance - 25);
                 motorBL.setPower(speed);
-                motorFR.setTargetPosition(currentFR + distance);
+                motorFR.setTargetPosition(distance + 25);
                 motorFR.setPower(speed);
-                motorBR.setTargetPosition(currentBR + distance);
+                motorBR.setTargetPosition(distance + 25);
                 motorBR.setPower(speed);
+                
+                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -77,22 +75,20 @@ public class Forward_Auto extends LinearOpMode {
                 telemetry.addData("Hue", hsvValues[0]);
                 telemetry.update();*/
             }
-            currentFL = motorFL.getCurrentPosition();
-            currentBL = motorBL.getCurrentPosition();
-            currentFR = motorFR.getCurrentPosition();
-            currentBR = motorBR.getCurrentPosition();
         }
         
         else if (direction.equals("back")) {
-            while ((Math.abs(motorFL.getCurrentPosition() - currentFL) < distance) && opModeIsActive()) {
-                motorFL.setTargetPosition(currentFL + distance);
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+                motorFL.setTargetPosition(distance + 25);
                 motorFL.setPower(speed);
-                motorBL.setTargetPosition(currentBL + distance);
+                motorBL.setTargetPosition(distance + 25);
                 motorBL.setPower(speed);
-                motorFR.setTargetPosition(currentFR - distance);
+                motorFR.setTargetPosition(-distance - 25);
                 motorFR.setPower(speed);
-                motorBR.setTargetPosition(currentBR - distance);
+                motorBR.setTargetPosition(-distance - 25);
                 motorBR.setPower(speed);
+                
+                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -101,22 +97,20 @@ public class Forward_Auto extends LinearOpMode {
                 telemetry.addData("Hue", hsvValues[0]);
                 telemetry.update();*/
             }
-            currentFL = motorFL.getCurrentPosition();
-            currentBL = motorBL.getCurrentPosition();
-            currentFR = motorFR.getCurrentPosition();
-            currentBR = motorBR.getCurrentPosition();
         }
         
         else if (direction.equals("right")) {
-            while ((Math.abs(motorFL.getCurrentPosition() - currentFL) < distance) && opModeIsActive()) {
-                motorFL.setTargetPosition(currentFL + distance);
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+                motorFL.setTargetPosition(distance + 25);
                 motorFL.setPower(speed);
-                motorBL.setTargetPosition(currentBL - distance);
+                motorBL.setTargetPosition(-distance - 25);
                 motorBL.setPower(speed);
-                motorFR.setTargetPosition(currentFR + distance);
+                motorFR.setTargetPosition(distance + 25);
                 motorFR.setPower(speed);
-                motorBR.setTargetPosition(currentBR - distance);
+                motorBR.setTargetPosition(-distance - 25);
                 motorBR.setPower(speed);
+                
+                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -125,22 +119,20 @@ public class Forward_Auto extends LinearOpMode {
                 telemetry.addData("Hue", hsvValues[0]);
                 telemetry.update();*/
             }
-            currentFL = motorFL.getCurrentPosition();
-            currentBL = motorBL.getCurrentPosition();
-            currentFR = motorFR.getCurrentPosition();
-            currentBR = motorBR.getCurrentPosition();
         }
         
         else if (direction.equals("left")) {
-            while ((Math.abs(motorFL.getCurrentPosition() - currentFL) < distance) && opModeIsActive()) {
-                motorFL.setTargetPosition(currentFL - distance);
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+                motorFL.setTargetPosition(-distance - 25);
                 motorFL.setPower(speed);
-                motorBL.setTargetPosition(currentBL + distance);
+                motorBL.setTargetPosition(distance + 25);
                 motorBL.setPower(speed);
-                motorFR.setTargetPosition(currentFR - distance);
+                motorFR.setTargetPosition(-distance - 25);
                 motorFR.setPower(speed);
-                motorBR.setTargetPosition(currentBR + distance);
+                motorBR.setTargetPosition(distance + 25);
                 motorBR.setPower(speed);
+                
+                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -149,22 +141,20 @@ public class Forward_Auto extends LinearOpMode {
                 telemetry.addData("Hue", hsvValues[0]);
                 telemetry.update();*/
             }
-            currentFL = motorFL.getCurrentPosition();
-            currentBL = motorBL.getCurrentPosition();
-            currentFR = motorFR.getCurrentPosition();
-            currentBR = motorBR.getCurrentPosition();
         }
         
         else if (direction.equals("turn_left")) {
-            while ((Math.abs(motorFL.getCurrentPosition() - currentFL) < distance) && opModeIsActive()) {
-                motorFL.setTargetPosition(currentFL - distance);
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+                motorFL.setTargetPosition(-distance - 25);
                 motorFL.setPower(speed);
-                motorBL.setTargetPosition(currentBL - distance);
+                motorBL.setTargetPosition(-distance - 25);
                 motorBL.setPower(speed);
-                motorFR.setTargetPosition(currentFR - distance);
+                motorFR.setTargetPosition(-distance - 25);
                 motorFR.setPower(speed);
-                motorBR.setTargetPosition(currentBR - distance);
+                motorBR.setTargetPosition(-distance - 25);
                 motorBR.setPower(speed);
+                
+                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -173,22 +163,20 @@ public class Forward_Auto extends LinearOpMode {
                 telemetry.addData("Hue", hsvValues[0]);
                 telemetry.update();*/
             }
-            currentFL = motorFL.getCurrentPosition();
-            currentBL = motorBL.getCurrentPosition();
-            currentFR = motorFR.getCurrentPosition();
-            currentBR = motorBR.getCurrentPosition();
         }
         
         else if (direction.equals("turn_right")) {
-            while ((Math.abs(motorFL.getCurrentPosition() - currentFL) < distance) && opModeIsActive()) {
-                motorFL.setTargetPosition(currentFL + distance);
+            while ((Math.abs(motorFL.getCurrentPosition()) < distance) && opModeIsActive()) {
+                motorFL.setTargetPosition(distance + 25);
                 motorFL.setPower(speed);
-                motorBL.setTargetPosition(currentBL + distance);
+                motorBL.setTargetPosition(distance + 25);
                 motorBL.setPower(speed);
-                motorFR.setTargetPosition(currentFR + distance);
+                motorFR.setTargetPosition(distance + 25);
                 motorFR.setPower(speed);
-                motorBR.setTargetPosition(currentBR + distance);
+                motorBR.setTargetPosition(distance + 25);
                 motorBR.setPower(speed);
+                
+                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -197,11 +185,29 @@ public class Forward_Auto extends LinearOpMode {
                 telemetry.addData("Hue", hsvValues[0]);
                 telemetry.update();*/
             }
-            currentFL = motorFL.getCurrentPosition();
-            currentBL = motorBL.getCurrentPosition();
-            currentFR = motorFR.getCurrentPosition();
-            currentBR = motorBR.getCurrentPosition();
         }
+        
+        else if (direction.equals("stop")) {
+            while (opModeIsActive()) {
+                motorFL.setPower(0);
+                motorBL.setPower(0);
+                motorFR.setPower(0);
+                motorBR.setPower(0);
+            }
+        }
+        
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    
+    public void speedIncrement(int distance) {
+        if (distance < 100) speed = .3;
+        else if (distance < 200) speed = .35;
+        else if (distance < 300) speed = .4;
+        else if (distance < 400) speed = .45;
+        else speed = .5;
     }
     
     @Override
@@ -244,6 +250,20 @@ public class Forward_Auto extends LinearOpMode {
         armAngle.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         
+        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armAngle.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        
+        motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
+        armAngle.setDirection(DcMotorSimple.Direction.FORWARD);
+        armSlide.setDirection(DcMotorSimple.Direction.FORWARD);
+        
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         
         waitForStart();
@@ -256,8 +276,8 @@ public class Forward_Auto extends LinearOpMode {
             
             //Grab the foundation
             
-            motors("front", 2000, .4);
-            motors("front", 1000, 0);
+            motors("front", 2000);
+            motors("stop", 0);
         }
     }
 }
