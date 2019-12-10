@@ -249,4 +249,13 @@ public class AutoMethods {
         
         clampDown = !clampDown;
     }
+    
+    public void sleep(long sleep) {
+        try {
+            Thread.sleep(sleep);
+        }
+        catch (InerruptedExcetrion e) {
+            tele.addData("Failed Sleep");
+        }
+    }
 }
