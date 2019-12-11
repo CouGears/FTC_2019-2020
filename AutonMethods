@@ -265,8 +265,8 @@ public class AutonMethods {
         counter++;
     }
     
-    public void intake() {
-        if (intakeOn) {
+    public void intake(String direction) {
+        if (direction.equals("in")) {
             intakeL.setPower(.5);
             intakeR.setPower(-.5);
         }
