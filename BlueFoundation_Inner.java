@@ -51,35 +51,20 @@ public class BlueFoundation_Inner extends OpMode {
                 robot.motors("front", 2400);
                 break;
             case 6:
-                robot.servoClamp();
+                robot.motors("left_turn", 90);
                 break;
-            case 7:
-                robot.sleep(250);
-                break;
-            case 8:
-                robot.motors("left", 2800);
-                break;
-            case 9:
-                robot.sleep(250);
-                break;
-            case 10:
-                robot.motors("back", 1000);
-                break;
-            case 11:
-                robot.sleep(250);
-                break;
-            case 12:
-                robot.motors("right", 1800);
-                break;
-            case 13:
-                robot.sleep(250);
-                break;
-            case 14:
-                robot.motors("left", 1700);
-                break;
-            case 15:
-                robot.motors("stop", 0);
-                break;
+			case 7:
+				robot.servoClamp();
+				break;
+			case 8:
+				robot.sleep(250);
+				break;
+			case 9:
+				robot.motors("back", 1700);
+				break;
+			case 10:
+				robot.motors("stop", 0);
+				break;
         }
         
         telemetry.addData("Case:", robot.counter);
