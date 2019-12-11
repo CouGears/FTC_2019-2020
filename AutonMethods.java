@@ -46,6 +46,10 @@ public class AutonMethods {
     float hsvValues[] = {0F, 0F, 0F};
     final float values[] = hsvValues;
     final double SCALE_FACTOR = 255;
+	
+	public static BNO055IMU gyro;
+    BNO055IMU.Parameters parameters;
+    Orientation angles;
     
     public void motors (String direction, int distance) {
         changeRunMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -221,6 +225,15 @@ public class AutonMethods {
         motorBR.setTargetPosition(0);
         
         int relativeLayoutId = map.appContext.getResources().getIdentifier("RelativeLayout", "id", map.appContext.getPackageName());
+		
+		BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        gyro = this.map.get(BNO055IMU.class, "gyro");
+        gyro.initialize(parameters);
+        tele.addData(">", "Gyro Calibrating. Do Not Move!");
+        tele.update();
     }
     
     public static void changeRunMode(DcMotor.RunMode runMode) {
@@ -284,4 +297,32 @@ public class AutonMethods {
         
         counter++;
     }
+	
+	public void runWithImu(int angle, String direction) {
+		if (angle < Math.abs(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle) {
+			if (direction.equals("turn_right")) {
+				motorFL.setTargetPosition(motorFL.getCurrnentPosition() + 400);
+				motorBL.setTargetPosition(motorBL.getCurrnentPosition() + 400);
+				motorFR.setTargetPosition(motorFR.getCurrnentPosition() + 400);
+				motorBR.setTargetPosition(motorBR.getCurrnentPosition() + 400);
+                speed(.3);
+			}
+			
+			else if (direction.equals("turn_left")) {
+				motorFL.setTargetPosition(-motorFL.getCurrnentPosition() - 400);
+				motorBL.setTargetPosition(-motorBL.getCurrnentPosition() - 400);
+				motorFR.setTargetPosition(-motorFR.getCurrnentPosition() - 400);
+				motorBR.setTargetPosition(-motorBR.getCurrnentPosition() - 400);
+                speed(.3);
+			}
+		}
+		
+		else {
+			motorFL.setTargetPosition(motorFL.getCurrnentPosition());
+            motorBL.setTargetPosition(motorBL.getCurrnentPosition());
+            motorFR.setTargetPosition(motorFR.getCurrnentPosition());
+            motorBR.setTargetPosition(motorBR.getCurrnentPosition());
+			speed(0);
+			
+	}
 }
