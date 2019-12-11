@@ -52,7 +52,7 @@ public class AutonMethods {
     final float values[] = hsvValues;
     final double SCALE_FACTOR = 255;
 	
-	public static BNO055IMU gyro;
+    public static BNO055IMU gyro;
     BNO055IMU.Parameters parameters;
     Orientation angles;
     
