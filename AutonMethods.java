@@ -132,13 +132,7 @@ public class AutonMethods {
         
         else if (direction.equals("turn_left")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                motorFL.setTargetPosition(-distance - 25);
-                motorBL.setTargetPosition(-distance - 25);
-                motorFR.setTargetPosition(-distance - 25);
-                motorBR.setTargetPosition(-distance - 25);
-                speed(speed);
-                
-                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
+                runWithImu(distance);
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -151,13 +145,7 @@ public class AutonMethods {
         
         else if (direction.equals("turn_right")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                motorFL.setTargetPosition(distance + 25);
-                motorBL.setTargetPosition(distance + 25);
-                motorFR.setTargetPosition(distance + 25);
-                motorBR.setTargetPosition(distance + 25);
-                speed(speed);
-                
-                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
+                runWithImu(distance);
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
