@@ -39,7 +39,7 @@ public class BlueFoundation_Inner extends OpMode {
                 robot.sleep(250);
                 break;
             case 2:
-                robot.motors("back", 2200);
+                robot.motors("back", 2000);
                 break;
             case 3:
                 robot.servoClamp();
@@ -48,7 +48,7 @@ public class BlueFoundation_Inner extends OpMode {
                 robot.sleep(250);
                 break;
             case 5:
-                robot.motors("front", 2200);
+                robot.motors("front", 2400);
                 break;
             case 6:
                 robot.servoClamp();
@@ -63,7 +63,7 @@ public class BlueFoundation_Inner extends OpMode {
                 robot.sleep(250);
                 break;
             case 10:
-                robot.motors("back", 1100);
+                robot.motors("back", 1000);
                 break;
             case 11:
                 robot.sleep(250);
@@ -75,9 +75,9 @@ public class BlueFoundation_Inner extends OpMode {
                 robot.sleep(250);
                 break;
             case 14:
-                robot.motors("left", 2000);
+                robot.motors("left", 1700);
                 break;
-            case 14:
+            case 15:
                 robot.motors("stop", 0);
                 break;
         }
