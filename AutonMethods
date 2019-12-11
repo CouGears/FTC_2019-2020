@@ -51,7 +51,7 @@ public class AutonMethods {
         changeRunMode(DcMotor.RunMode.RUN_TO_POSITION);
         
         if (direction.equals("front")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(-distance - 25);
                 motorBL.setTargetPosition(-distance - 25);
                 motorFR.setTargetPosition(distance + 25);
@@ -89,7 +89,7 @@ public class AutonMethods {
         }
         
         else if (direction.equals("right")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(distance + 25);
                 motorBL.setTargetPosition(-distance - 25);
                 motorFR.setTargetPosition(distance + 25);
@@ -108,7 +108,7 @@ public class AutonMethods {
         }
         
         else if (direction.equals("left")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(-distance - 25);
                 motorBL.setTargetPosition(distance + 25);
                 motorFR.setTargetPosition(-distance - 25);
@@ -127,7 +127,7 @@ public class AutonMethods {
         }
         
         else if (direction.equals("turn_left")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(-distance - 25);
                 motorBL.setTargetPosition(-distance - 25);
                 motorFR.setTargetPosition(-distance - 25);
@@ -146,7 +146,7 @@ public class AutonMethods {
         }
         
         else if (direction.equals("turn_right")) {
-            while ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
                 motorFL.setTargetPosition(distance + 25);
                 motorBL.setTargetPosition(distance + 25);
                 motorFR.setTargetPosition(distance + 25);
@@ -179,17 +179,16 @@ public class AutonMethods {
     }
     
     public void speedIncrement(int distance) {
-        if (distance < 200) speed = .2;
-        else if (distance < 400) speed = .25;
-        else if (distance < 600) speed = .3;
-        else if (distance < 800) speed = .35;
-        else if (distance < 1600) speed = .4;
-        else if (distance < 1800) speed = .45;
+        if (distance < 100) speed = .2;
+        else if (distance < 200) speed = .25;
+        else if (distance < 300) speed = .3;
+        else if (distance < 400) speed = .35;
+        else if (distance < 500) speed = .4;
+        else if (distance < 600) speed = .45;
         else speed = .5;
     }
     
     public void init(HardwareMap map, Telemetry tele, boolean auton) {
-        
         motorFL = map.get(DcMotor.class, "motorFL");
         motorBL = map.get(DcMotor.class, "motorBL");
         motorFR = map.get(DcMotor.class, "motorFR");
@@ -276,7 +275,6 @@ public class AutonMethods {
             intakeR.setPower(.5);
         }
         
-        intakeOn = !intakeOn;
         counter++;
     }
     
