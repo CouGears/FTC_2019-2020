@@ -33,9 +33,9 @@ public class AutonMethods {
         
     }
     
-    public static DcMotor motorFL, motorBL, motorBR, motorFR;
+    static DcMotor motorFL, motorBL, motorBR, motorFR, intakeFL, intakeFR;
     static Servo servoLS, servoRS, servoLR, servoRR, angleL, angleR;
-    static CRServo intakeL, intakeR;
+    static CRServo intakeML, intakeMR;
     HardwareMap map;
     Telemetry tele;
     
@@ -267,21 +267,21 @@ public class AutonMethods {
     
     public void intake(String direction) {
         if (direction.equals("in")) {
-            intakeL.setPower(.5);
-            intakeR.setPower(-.5);
+            intakeFL.setPower(.5);
+            intakeFR.setPower(-.5);
         }
         
         else {
-            intakeL.setPower(-.5);
-            intakeR.setPower(.5);
+            intakeFL.setPower(-.5);
+            intakeFR.setPower(.5);
         }
         
         counter++;
     }
     
     public void intakeOff() {
-        intakeL.setPower(0);
-        intakeR.setPower(0);
+        intakeFL.setPower(0);
+        intakeFR.setPower(0);
         
         counter++;
     }
