@@ -305,7 +305,7 @@ public class AutonMethods {
 				motorBL.setTargetPosition(motorBL.getCurrnentPosition() + 400);
 				motorFR.setTargetPosition(motorFR.getCurrnentPosition() + 400);
 				motorBR.setTargetPosition(motorBR.getCurrnentPosition() + 400);
-                speed(.3);
+                		speed(.3);
 			}
 			
 			else if (direction.equals("turn_left")) {
@@ -313,16 +313,19 @@ public class AutonMethods {
 				motorBL.setTargetPosition(-motorBL.getCurrnentPosition() - 400);
 				motorFR.setTargetPosition(-motorFR.getCurrnentPosition() - 400);
 				motorBR.setTargetPosition(-motorBR.getCurrnentPosition() - 400);
-                speed(.3);
+                		speed(.3);
 			}
 		}
 		
 		else {
 			motorFL.setTargetPosition(motorFL.getCurrnentPosition());
-            motorBL.setTargetPosition(motorBL.getCurrnentPosition());
-            motorFR.setTargetPosition(motorFR.getCurrnentPosition());
-            motorBR.setTargetPosition(motorBR.getCurrnentPosition());
+			motorBL.setTargetPosition(motorBL.getCurrnentPosition());
+			motorFR.setTargetPosition(motorFR.getCurrnentPosition());
+			motorBR.setTargetPosition(motorBR.getCurrnentPosition());
 			speed(0);
 			
+			command++;
+			changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		}
 	}
 }
