@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -132,7 +137,7 @@ public class AutonMethods {
         
         else if (direction.equals("turn_left")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                runWithImu(distance);
+                runWithImu(distance, direction);
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -145,7 +150,7 @@ public class AutonMethods {
         
         else if (direction.equals("turn_right")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                runWithImu(distance);
+                runWithImu(distance, direction);
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -185,15 +190,13 @@ public class AutonMethods {
         motorBL = map.get(DcMotor.class, "motorBL");
         motorFR = map.get(DcMotor.class, "motorFR");
         motorBR = map.get(DcMotor.class, "motorBR");
+        intakeFL = map.get(DcMotor.class, "intakeFL");
+        intakeFR = map.get(DcMotor.class, "intakeFR");
         //sensorColor = map.get(ColorSensor.class, "sensorColorRange");
         servoLS = map.get(Servo.class, "servoLS");
         servoRS = map.get(Servo.class, "servoRS");
         servoLR = map.get(Servo.class, "servoLR");
         servoRR = map.get(Servo.class, "servoRR");
-        intakeL = map.get(CRServo.class, "intakeL");
-        intakeR = map.get(CRServo.class, "intakeR");
-        angleL = map.get(Servo.class, "angleL");
-        angleR = map.get(Servo.class, "angleR");
         
         changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         
@@ -218,7 +221,7 @@ public class AutonMethods {
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        gyro = this.map.get(BNO055IMU.class, "gyro");
+        gyro = map.get(BNO055IMU.class, "imu");
         gyro.initialize(parameters);
         tele.addData(">", "Gyro Calibrating. Do Not Move!");
         tele.update();
@@ -287,32 +290,32 @@ public class AutonMethods {
     }
 	
 	public void runWithImu(int angle, String direction) {
-		if (angle < Math.abs(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle) {
+		if (angle < Math.abs(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle)) {
 			if (direction.equals("turn_right")) {
-				motorFL.setTargetPosition(motorFL.getCurrnentPosition() + 400);
-				motorBL.setTargetPosition(motorBL.getCurrnentPosition() + 400);
-				motorFR.setTargetPosition(motorFR.getCurrnentPosition() + 400);
-				motorBR.setTargetPosition(motorBR.getCurrnentPosition() + 400);
-                		speed(.3);
+				motorFL.setTargetPosition(motorFL.getCurrentPosition() + 400);
+				motorBL.setTargetPosition(motorBL.getCurrentPosition() + 400);
+				motorFR.setTargetPosition(motorFR.getCurrentPosition() + 400);
+				motorBR.setTargetPosition(motorBR.getCurrentPosition() + 400);
+                speed(.3);
 			}
 			
 			else if (direction.equals("turn_left")) {
-				motorFL.setTargetPosition(motorFL.getCurrnentPosition() - 400);
-				motorBL.setTargetPosition(motorBL.getCurrnentPosition() - 400);
-				motorFR.setTargetPosition(motorFR.getCurrnentPosition() - 400);
-				motorBR.setTargetPosition(motorBR.getCurrnentPosition() - 400);
-                		speed(.3);
+				motorFL.setTargetPosition(motorFL.getCurrentPosition() - 400);
+				motorBL.setTargetPosition(motorBL.getCurrentPosition() - 400);
+				motorFR.setTargetPosition(motorFR.getCurrentPosition() - 400);
+				motorBR.setTargetPosition(motorBR.getCurrentPosition() - 400);
+                speed(.3);
 			}
 		}
 		
 		else {
-			motorFL.setTargetPosition(motorFL.getCurrnentPosition());
-			motorBL.setTargetPosition(motorBL.getCurrnentPosition());
-			motorFR.setTargetPosition(motorFR.getCurrnentPosition());
-			motorBR.setTargetPosition(motorBR.getCurrnentPosition());
+			motorFL.setTargetPosition(motorFL.getCurrentPosition());
+			motorBL.setTargetPosition(motorBL.getCurrentPosition());
+			motorFR.setTargetPosition(motorFR.getCurrentPosition());
+			motorBR.setTargetPosition(motorBR.getCurrentPosition());
 			speed(0);
 			
-			command++;
+			counter++;
 			changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		}
 	}
