@@ -297,10 +297,10 @@ public class AutonMethods {
 			}
 			
 			else if (direction.equals("turn_left")) {
-				motorFL.setTargetPosition(-motorFL.getCurrnentPosition() - 400);
-				motorBL.setTargetPosition(-motorBL.getCurrnentPosition() - 400);
-				motorFR.setTargetPosition(-motorFR.getCurrnentPosition() - 400);
-				motorBR.setTargetPosition(-motorBR.getCurrnentPosition() - 400);
+				motorFL.setTargetPosition(motorFL.getCurrnentPosition() - 400);
+				motorBL.setTargetPosition(motorBL.getCurrnentPosition() - 400);
+				motorFR.setTargetPosition(motorFR.getCurrnentPosition() - 400);
+				motorBR.setTargetPosition(motorBR.getCurrnentPosition() - 400);
                 		speed(.3);
 			}
 		}
