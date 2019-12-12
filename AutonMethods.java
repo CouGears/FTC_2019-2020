@@ -217,12 +217,16 @@ public class AutonMethods {
         
         int relativeLayoutId = map.appContext.getResources().getIdentifier("RelativeLayout", "id", map.appContext.getPackageName());
 		
-		BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+	BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        gyro = map.get(BNO055IMU.class, "imu");
-        gyro.initialize(parameters);
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+	
         tele.addData(">", "Gyro Calibrating. Do Not Move!");
         tele.update();
     }
@@ -290,7 +294,7 @@ public class AutonMethods {
     }
 	
 	public void runWithImu(int angle, String direction) {
-		if (angle < Math.abs(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle)) {
+		if (angle < Math.abs(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES))) {
 			if (direction.equals("turn_right")) {
 				motorFL.setTargetPosition(motorFL.getCurrentPosition() + 400);
 				motorBL.setTargetPosition(motorBL.getCurrentPosition() + 400);
