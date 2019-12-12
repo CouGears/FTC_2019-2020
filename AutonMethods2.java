@@ -45,14 +45,14 @@ public class AutonMethods {
     Telemetry tele;
     
     private double speed;
-    private boolean clampDown = false;
+    private boolean clampDown = true;
     public int counter = 0;
     
     float hsvValues[] = {0F, 0F, 0F};
     final float values[] = hsvValues;
     final double SCALE_FACTOR = 255;
-    
-    public static BNO055IMU gyro;
+	
+    public static BNO055IMU imu;
     BNO055IMU.Parameters parameters;
     Orientation angles;
     
@@ -135,17 +135,9 @@ public class AutonMethods {
             }
         }
         
-        else if (direction.equals("turn_right")) {
+        else if (direction.equals("turn_left")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                //runWithImu(distance, direction);
-                
-                motorFL.setTargetPosition(distance + 25);
-                motorBL.setTargetPosition(distance + 25);
-                motorFR.setTargetPosition(distance + 25);
-                motorBR.setTargetPosition(distance + 25);
-                speed(speed);
-                
-                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
+                runWithImu(distance, direction);
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -156,17 +148,9 @@ public class AutonMethods {
             }
         }
         
-        else if (direction.equals("turn_left")) {
+        else if (direction.equals("turn_right")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                //runWithImu(distance, direction);
-                
-                motorFL.setTargetPosition(-distance - 25);
-                motorBL.setTargetPosition(-distance - 25);
-                motorFR.setTargetPosition(-distance - 25);
-                motorBR.setTargetPosition(-distance - 25);
-                speed(speed);
-                
-                speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
+                runWithImu(distance, direction);
                 
                 /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
                         (int) (sensorColor.green() * SCALE_FACTOR),
@@ -185,7 +169,7 @@ public class AutonMethods {
             speed(0);
         }
         
-        if (!(Math.abs(motorFL.getCurrentPosition()) < distance)) {
+        if (!(Math.abs(motorFL.getCurrentPosition()) < distance) && !(direction.equals("turn_right") || direction.equals("turn_left"))) {
             counter++;
             changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
@@ -202,6 +186,9 @@ public class AutonMethods {
     }
     
     public void init(HardwareMap map, Telemetry tele, boolean auton) {
+        this.map = map;
+        this.tele = tele;
+        
         motorFL = map.get(DcMotor.class, "motorFL");
         motorBL = map.get(DcMotor.class, "motorBL");
         motorFR = map.get(DcMotor.class, "motorFR");
@@ -232,13 +219,17 @@ public class AutonMethods {
         motorBR.setTargetPosition(0);
         
         int relativeLayoutId = map.appContext.getResources().getIdentifier("RelativeLayout", "id", map.appContext.getPackageName());
-        
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+		
+	    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        //gyro = map.get(BNO055IMU.class, "imu");
-        //gyro.initialize(parameters);
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        
+        imu = map.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+	
         tele.addData(">", "Gyro Calibrating. Do Not Move!");
         tele.update();
     }
@@ -304,35 +295,45 @@ public class AutonMethods {
         
         counter++;
     }
-    
-    /*public void runWithImu(int angle, String direction) {
-        if (angle < Math.abs(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle)) {
-            if (direction.equals("turn_right")) {
-                motorFL.setTargetPosition(motorFL.getCurrentPosition() + 400);
-                motorBL.setTargetPosition(motorBL.getCurrentPosition() + 400);
-                motorFR.setTargetPosition(motorFR.getCurrentPosition() + 400);
-                motorBR.setTargetPosition(motorBR.getCurrentPosition() + 400);
-                speed(.3);
-            }
-            
-            else if (direction.equals("turn_left")) {
-                motorFL.setTargetPosition(motorFL.getCurrentPosition() - 400);
-                motorBL.setTargetPosition(motorBL.getCurrentPosition() - 400);
-                motorFR.setTargetPosition(motorFR.getCurrentPosition() - 400);
-                motorBR.setTargetPosition(motorBR.getCurrentPosition() - 400);
-                speed(.3);
-            }
-        }
+	
+	public void runWithImu(int angle, String direction) {
+        tele.addData("Gyro:", Math.round(Math.abs(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle)));
+        tele.addData("Angle:", angle);
+        tele.addData("Case:", angle != Math.round(Math.abs(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle)));
+        tele.addData("Motor Goal:", motorFL.getTargetPosition());
+        tele.addData("Motor Current:", motorFL.getCurrentPosition());
+        tele.update();
         
-        else {
-            motorFL.setTargetPosition(motorFL.getCurrentPosition());
-            motorBL.setTargetPosition(motorBL.getCurrentPosition());
-            motorFR.setTargetPosition(motorFR.getCurrentPosition());
-            motorBR.setTargetPosition(motorBR.getCurrentPosition());
-            speed(0);
-            
-            counter++;
-            changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
-    }*/
+		if (angle != Math.round(Math.abs(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle))) {
+			if (direction.equals("turn_right")) {
+				motorFL.setTargetPosition(motorFL.getCurrentPosition() + 20000);
+				motorBL.setTargetPosition(motorBL.getCurrentPosition() + 20000);
+				motorFR.setTargetPosition(motorFR.getCurrentPosition() + 20000);
+				motorBR.setTargetPosition(motorBR.getCurrentPosition() + 20000);
+                speed(.5);
+			}
+			
+			else if (direction.equals("turn_left")) {
+				motorFL.setTargetPosition(motorFL.getCurrentPosition() - 20000);
+				motorBL.setTargetPosition(motorBL.getCurrentPosition() - 20000);
+				motorFR.setTargetPosition(motorFR.getCurrentPosition() - 20000);
+				motorBR.setTargetPosition(motorBR.getCurrentPosition() - 20000);
+                speed(.5);
+			}
+		}
+		
+		else {
+			motorFL.setTargetPosition(motorFL.getCurrentPosition());
+			motorBL.setTargetPosition(motorBL.getCurrentPosition());
+			motorFR.setTargetPosition(motorFR.getCurrentPosition());
+			motorBR.setTargetPosition(motorBR.getCurrentPosition());
+			speed(0);
+			
+			tele.addData("Case:", angle != Math.round(Math.abs(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle)));
+			tele.update();
+			
+			counter++;
+			changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		}
+	}
 }
