@@ -220,18 +220,18 @@ public class AutonMethods {
         
         int relativeLayoutId = map.appContext.getResources().getIdentifier("RelativeLayout", "id", map.appContext.getPackageName());
 		
-	    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+	BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
         parameters.loggingEnabled = true;
         parameters.loggingTag = "IMU";
         
-        imu = map.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-	
         tele.addData(">", "Gyro Calibrating. Do Not Move!");
         tele.update();
+        
+        imu = map.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
     }
     
     public static void changeRunMode(DcMotor.RunMode runMode) {
@@ -277,13 +277,13 @@ public class AutonMethods {
     
     public void intake(String direction) {
         if (direction.equals("in")) {
-            intakeFL.setPower(.5);
-            intakeFR.setPower(-.5);
+            intakeFL.setPower(-.5);
+            intakeFR.setPower(.5);
         }
         
         else {
-            intakeFL.setPower(-.5);
-            intakeFR.setPower(.5);
+            intakeFL.setPower(.5);
+            intakeFR.setPower(-.5);
         }
         
         counter++;
