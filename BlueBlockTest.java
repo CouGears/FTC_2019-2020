@@ -60,34 +60,70 @@ public class BlueBlockTest extends OpMode {
                 robot.sleep(500);
                 break;
             case 9:
-                robot.motors("right", 2500);
+                robot.motors("right", 2600);
                 break;
             case 10:
                 robot.sleep(250);
                 break;
             case 11:
-                robot.motors("stop", 1300);
+                robot.intake("in");
                 break;
             case 12:
-                robot.sleep(250);
+                robot.motors("front", 600);
                 break;
             case 13:
-                robot.motors("back", 500);
+                robot.sleep(1000);
                 break;
             case 14:
-                robot.sleep(250);
+                robot.intakeOff();
                 break;
             case 15:
-                robot.motors("right", 2000);
+                robot.motors("back", 500);
                 break;
             case 16:
                 robot.sleep(250);
                 break;
             case 17:
-                robot.motors("front", 2500);
+                robot.motors("left", 2600);
                 break;
             case 18:
-                robot.motors("stop", 1000);
+                robot.intake("out");
+                break;
+            case 19:
+                robot.sleep(500);
+                break;
+            case 20:
+                robot.intakeOff();
+                break;
+			case 21:
+                robot.motors("right", 3000);
+                break;
+            case 22:
+                robot.sleep(250);
+                break;
+			case 23:
+                robot.intake("in");
+                break;
+            case 24:
+                robot.motors("front", 600);
+                break;
+			case 25:
+                robot.sleep(1000);
+                break;
+            case 26:
+                robot.intakeOff();
+                break;
+			case 27:
+                robot.motors("left", 3000);
+                break;
+            case 28:
+                robot.intake("out");
+                break;
+			case 29:
+                robot.sleep(500);
+                break;
+            case 30:
+                robot.motors("right", 600);
                 break;
         }
         
