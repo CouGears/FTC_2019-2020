@@ -126,7 +126,7 @@ public class BlueBlockTest extends OpMode {
 				robot.motors("right", 600);
 				break;
 			case 31:
-				robot.motors("right", 600);
+				robot.motors("stop", 1000);
 				break;
 		}
 		
