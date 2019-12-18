@@ -204,10 +204,7 @@ public class AutonMethods {
         else if (distance < 300) speed = .3;
         else if (distance < 400) speed = .35;
         else if (distance < 500) speed = .4;
-        else if (distance < 600) speed = .45;
-        else if (distance < 800) speed = .6;
-        else if (distance < 1000) speed = .8;
-        else speed = 1;
+        else speed = .5;
     }
     
     //Initialization
@@ -358,6 +355,7 @@ public class AutonMethods {
         }
     }
     
+    //Function to run until the robot detects a black block
     public void runTillColor(String direction) {
         if (direction.equals("right")) {
             Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
@@ -398,5 +396,155 @@ public class AutonMethods {
                 changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
         }
+    }
+    
+    public void motorsFast (String direction, int distance) {
+        changeRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+        
+        if (direction.equals("front")) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+                motorFL.setTargetPosition(-distance - 50);
+                motorBL.setTargetPosition(-distance - 50);
+                motorFR.setTargetPosition(distance + 50);
+                motorBR.setTargetPosition(distance + 50);
+                speed(speed);
+                
+                speedIncrementFast(distance - (Math.abs(motorFL.getCurrentPosition())));
+                
+                /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                    (int) (sensorColor.green() * SCALE_FACTOR),
+                    (int) (sensorColor.blue() * SCALE_FACTOR),
+                    hsvValues);
+                
+                telemetry.addData("Hue", hsvValues[0]);
+                telemetry.update();*/
+            }
+        }
+        
+        else if (direction.equals("back")) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+                motorFL.setTargetPosition(distance + 50);
+                motorBL.setTargetPosition(distance + 50);
+                motorFR.setTargetPosition(-distance - 50);
+                motorBR.setTargetPosition(-distance - 50);
+                speed(speed);
+                
+                speedIncrementFast(distance - (Math.abs(motorFL.getCurrentPosition())));
+                
+                /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                    (int) (sensorColor.green() * SCALE_FACTOR),
+                    (int) (sensorColor.blue() * SCALE_FACTOR),
+                    hsvValues);
+                
+                telemetry.addData("Hue", hsvValues[0]);
+                telemetry.update();*/
+            }
+        }
+        
+        else if (direction.equals("right")) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+                motorFL.setTargetPosition(distance + 50);
+                motorBL.setTargetPosition(-distance - 50);
+                motorFR.setTargetPosition(distance + 50);
+                motorBR.setTargetPosition(-distance - 50);
+                speed(speed);
+                
+                speedIncrementFast(distance - (Math.abs(motorFL.getCurrentPosition())));
+                
+                /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                    (int) (sensorColor.green() * SCALE_FACTOR),
+                    (int) (sensorColor.blue() * SCALE_FACTOR),
+                    hsvValues);
+                
+                telemetry.addData("Hue", hsvValues[0]);
+                telemetry.update();*/
+            }
+        }
+        
+        else if (direction.equals("left")) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+                motorFL.setTargetPosition(-distance - 50);
+                motorBL.setTargetPosition(distance + 50);
+                motorFR.setTargetPosition(-distance - 50);
+                motorBR.setTargetPosition(distance + 50);
+                speed(speed);
+                
+                speedIncrementFast(distance - (Math.abs(motorFL.getCurrentPosition())));
+
+                /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                    (int) (sensorColor.green() * SCALE_FACTOR),
+                    (int) (sensorColor.blue() * SCALE_FACTOR),
+                    hsvValues);
+                
+                telemetry.addData("Hue", hsvValues[0]);
+                telemetry.update();*/
+            }
+        }
+        
+        else if (direction.equals("turn_left")) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+                motorFL.setTargetPosition(-distance - 50);
+                motorBL.setTargetPosition(-distance - 50);
+                motorFR.setTargetPosition(-distance - 50);
+                motorBR.setTargetPosition(-distance - 50);
+                speed(speed);
+                
+                speedIncrementFast(distance - (Math.abs(motorFL.getCurrentPosition())));
+
+                /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                    (int) (sensorColor.green() * SCALE_FACTOR),
+                    (int) (sensorColor.blue() * SCALE_FACTOR),
+                    hsvValues);
+                
+                telemetry.addData("Hue", hsvValues[0]);
+                telemetry.update();*/
+            }
+        }
+        
+        else if (direction.equals("turn_right")) {
+            if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
+                motorFL.setTargetPosition(distance + 50);
+                motorBL.setTargetPosition(distance + 50);
+                motorFR.setTargetPosition(distance + 50);
+                motorBR.setTargetPosition(distance + 50);
+                speed(speed);
+                
+                speedIncrementFast(distance - (Math.abs(motorFL.getCurrentPosition())));
+
+                /*Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                    (int) (sensorColor.green() * SCALE_FACTOR),
+                    (int) (sensorColor.blue() * SCALE_FACTOR),
+                    hsvValues);
+                
+                telemetry.addData("Hue", hsvValues[0]);
+                telemetry.update();*/
+            }
+        }
+        
+        else if (direction.equals("stop")) {
+            motorFL.setTargetPosition(motorFL.getCurrentPosition());
+            motorBL.setTargetPosition(motorBL.getCurrentPosition());
+            motorFR.setTargetPosition(motorFR.getCurrentPosition());
+            motorBR.setTargetPosition(motorBR.getCurrentPosition());
+            speed(0);
+        }
+        
+        if (!(Math.abs(motorFL.getCurrentPosition()) < distance)) {
+            counter++;
+            changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+    }
+    
+    //Function to slow down the robot as it approaches its destination
+    public void speedIncrementFast(int distance) {
+        if (distance < 100) speed = .2;
+        else if (distance < 200) speed = .25;
+        else if (distance < 300) speed = .3;
+        else if (distance < 400) speed = .35;
+        else if (distance < 500) speed = .4;
+        else if (distance < 600) speed = .5;
+        else if (distance < 800) speed = .7;
+        else if (distance < 1000) speed = .9;
+        else speed = 1;
     }
 }
