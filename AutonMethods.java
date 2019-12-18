@@ -43,12 +43,13 @@ public class AutonMethods {
     static DcMotor motorFL, motorBL, motorBR, motorFR, intakeFL, intakeFR;
     static Servo servoLS, servoRS, servoLR, servoRR, angleL, angleR;
     static CRServo intakeML, intakeMR;
+    static ColorSensor sensorColor;
     HardwareMap map;
     Telemetry tele;
     
     private double speed;
     private boolean clampDown = false;
-    public int counter = 0;
+    public int counter = 0, ColorEncoder = 0;
     
     float hsvValues[] = {0F, 0F, 0F};
     final float values[] = hsvValues;
@@ -64,10 +65,10 @@ public class AutonMethods {
         
         if (direction.equals("front")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                motorFL.setTargetPosition(-distance - 25);
-                motorBL.setTargetPosition(-distance - 25);
-                motorFR.setTargetPosition(distance + 25);
-                motorBR.setTargetPosition(distance + 25);
+                motorFL.setTargetPosition(-distance - 50);
+                motorBL.setTargetPosition(-distance - 50);
+                motorFR.setTargetPosition(distance + 50);
+                motorBR.setTargetPosition(distance + 50);
                 speed(speed);
                 
                 speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
@@ -84,10 +85,10 @@ public class AutonMethods {
         
         else if (direction.equals("back")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                motorFL.setTargetPosition(distance + 25);
-                motorBL.setTargetPosition(distance + 25);
-                motorFR.setTargetPosition(-distance - 25);
-                motorBR.setTargetPosition(-distance - 25);
+                motorFL.setTargetPosition(distance + 50);
+                motorBL.setTargetPosition(distance + 50);
+                motorFR.setTargetPosition(-distance - 50);
+                motorBR.setTargetPosition(-distance - 50);
                 speed(speed);
                 
                 speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
@@ -104,10 +105,10 @@ public class AutonMethods {
         
         else if (direction.equals("right")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                motorFL.setTargetPosition(distance + 25);
-                motorBL.setTargetPosition(-distance - 25);
-                motorFR.setTargetPosition(distance + 25);
-                motorBR.setTargetPosition(-distance - 25);
+                motorFL.setTargetPosition(distance + 50);
+                motorBL.setTargetPosition(-distance - 50);
+                motorFR.setTargetPosition(distance + 50);
+                motorBR.setTargetPosition(-distance - 50);
                 speed(speed);
                 
                 speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
@@ -124,10 +125,10 @@ public class AutonMethods {
         
         else if (direction.equals("left")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                motorFL.setTargetPosition(-distance - 25);
-                motorBL.setTargetPosition(distance + 25);
-                motorFR.setTargetPosition(-distance - 25);
-                motorBR.setTargetPosition(distance + 25);
+                motorFL.setTargetPosition(-distance - 50);
+                motorBL.setTargetPosition(distance + 50);
+                motorFR.setTargetPosition(-distance - 50);
+                motorBR.setTargetPosition(distance + 50);
                 speed(speed);
                 
                 speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
@@ -144,10 +145,10 @@ public class AutonMethods {
         
         else if (direction.equals("turn_left")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                motorFL.setTargetPosition(-distance - 25);
-                motorBL.setTargetPosition(-distance - 25);
-                motorFR.setTargetPosition(-distance - 25);
-                motorBR.setTargetPosition(-distance - 25);
+                motorFL.setTargetPosition(-distance - 50);
+                motorBL.setTargetPosition(-distance - 50);
+                motorFR.setTargetPosition(-distance - 50);
+                motorBR.setTargetPosition(-distance - 50);
                 speed(speed);
                 
                 speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
@@ -164,10 +165,10 @@ public class AutonMethods {
         
         else if (direction.equals("turn_right")) {
             if ((Math.abs(motorFL.getCurrentPosition()) < distance)) {
-                motorFL.setTargetPosition(distance + 25);
-                motorBL.setTargetPosition(distance + 25);
-                motorFR.setTargetPosition(distance + 25);
-                motorBR.setTargetPosition(distance + 25);
+                motorFL.setTargetPosition(distance + 50);
+                motorBL.setTargetPosition(distance + 50);
+                motorFR.setTargetPosition(distance + 50);
+                motorBR.setTargetPosition(distance + 50);
                 speed(speed);
                 
                 speedIncrement(distance - (Math.abs(motorFL.getCurrentPosition())));
@@ -204,7 +205,9 @@ public class AutonMethods {
         else if (distance < 400) speed = .35;
         else if (distance < 500) speed = .4;
         else if (distance < 600) speed = .45;
-        else speed = .5;
+        else if (distance < 800) speed = .6;
+        else if (distance < 1000) speed = .8;
+        else speed = 1;
     }
     
     //Initialization
@@ -220,6 +223,7 @@ public class AutonMethods {
         servoRS = map.get(Servo.class, "servoRS");
         servoLR = map.get(Servo.class, "servoLR");
         servoRR = map.get(Servo.class, "servoRR");
+        sensorColor = map.get(ColorSensor.class, "SensorColor");
         
         changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         
@@ -351,6 +355,48 @@ public class AutonMethods {
             
             counter++;
             changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+    }
+    
+    public void runTillColor(String direction) {
+        if (direction.equals("right")) {
+            Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                (int) (sensorColor.green() * SCALE_FACTOR),
+                (int) (sensorColor.blue() * SCALE_FACTOR),
+                hsvValues);
+            
+            //tele.addData("Hue", hsvValues[0]);
+            //tele.update();
+            
+            if (hsvValues[0] < 100) {
+                motors("right", 200 + Math.abs(motorFL.getCurrentPosition()));
+                ColorEncoder++;
+            }
+            
+            else {
+                motors("stop", 50);
+                changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+        }
+        
+        else if (direction.equals("left")) {
+            Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
+                (int) (sensorColor.green() * SCALE_FACTOR),
+                (int) (sensorColor.blue() * SCALE_FACTOR),
+                hsvValues);
+            
+            //tele.addData("Hue", hsvValues[0]);
+            //tele.update();
+            
+            if (hsvValues[0] < 100) {
+                motors("left", 200 + Math.abs(motorFL.getCurrentPosition()));
+                ColorEncoder++;
+            }
+            
+            else {
+                motors("stop", 50);
+                changeRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
         }
     }
 }
