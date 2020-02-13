@@ -991,85 +991,85 @@ public class AutonMethods {
                 case 3:
                     switch (blockCounter) {
                         case 0:
-                            motorsFast("front", 500);
+                            motorsFast("right", 300);
                             break;
                         case 1:
                             sleep(100);
                             break;
                         case 2:
-                            motorsFast("turn_left", 850);
+                            motorsFast("front", 650);
                             break;
                         case 3:
-                            intake("in");
+                            sleep(100);
                             break;
                         case 4:
-                            sleep(100);
+                            motorsFast("turn_left", 900);
                             break;
                         case 5:
-                            motorsFast("front", 500);
+                            intake("in");
                             break;
                         case 6:
-                            sleep(250);
+                            sleep(100);
                             break;
                         case 7:
-                            motorsFast("turn_right", 850);
+                            motorsFast("front", 550);
                             break;
                         case 8:
-                            sleep(100);
+                            sleep(1000);
                             break;
                         case 9:
-                            motorsFast("back", 600);
+                            intakeOff();
                             break;
                         case 10:
-                            sleep(100);
+                            motorsFast("turn_right", 900);
                             break;
                         case 11:
                             sleep(100);
                             break;
                         case 12:
-                            motorsFast("turn_left", 850);
+                            motorsFast("back", 700);
                             break;
                         case 13:
                             sleep(100);
                             break;
                         case 14:
-                            motorsFast("back", 2000);
+                            sleep(100);
                             break;
                         case 15:
-                            sleep(100);
+                            motorsFast("turn_left", 875);
                             break;
                         case 16:
-                            motorsFast("turn_left", 850);
-                            break;
-                        case 17:
                             sleep(100);
                             break;
+                        case 17:
+                            motorsFast("back", 3700);
+                            break;
                         case 18:
-                            motorsFast("back", 900);
+                            sleep(100);
                             break;
                         case 19:
-                            servoClamp();
+                            motorsFast("turn_left", 750);
                             break;
                         case 20:
                             sleep(100);
                             break;
                         case 21:
-                            motorsFast("turn_right", 400);
+                            motorsFast("back", 1100);
                             break;
                         case 22:
-                            sleep(100);
+                            servoClamp();
                             break;
                         case 23:
-                            motorsFast("front", 2400);
-                            break;
-                        case 24:
                             sleep(100);
                             break;
+                        case 24:
+                            motorsFast("turn_right", 400);
+                            break;
                         case 25:
-                            motors("turn_right", 2500);
+                            sleep(100);
                             break;
                         case 26:
-                            servoClamp();
+                            motorsFast("front", 2000);
                             break;
                         case 27:
                             sleep(100);
@@ -1078,18 +1078,27 @@ public class AutonMethods {
                             intake("in");
                             break;
                         case 29:
-                            motorsFast("back", 1700);
+                            motors("turn_right", 2500);
                             break;
                         case 30:
-                            sleep(100);
+                            servoClamp();
                             break;
                         case 31:
-                            intakeOff();
+                            sleep(100);
                             break;
                         case 32:
-                            motorsFast("front", 2500);
+                            motorsFast("back", 2000);
                             break;
                         case 33:
+                            sleep(100);
+                            break;
+                        case 34:
+                            intakeOff();
+                            break;
+                        case 35:
+                            motorsFast("front", 2300);
+                            break;
+                        case 36:
                             motors("stop", 1000);
                             break;
                     }
