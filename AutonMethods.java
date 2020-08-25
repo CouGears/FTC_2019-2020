@@ -1224,12 +1224,12 @@ public class AutonMethods {
         }
     }
     
-    //Function to acess the motorFL encoder value
+    //Function to access the motorFL encoder value
     public int FL() {
         return motorFL.getCurrentPosition();
     }
     
-    //Function to acess the first color sensor's value
+    //Function to access the first color sensor's value
     public float color1() {
         Color.RGBToHSV((int) (sensorColor1.red() * SCALE_FACTOR),
             (int) (sensorColor1.green() * SCALE_FACTOR),
@@ -1238,7 +1238,7 @@ public class AutonMethods {
         return hsvValues1[0];
     }
     
-    //Function to acess the first color sensor's value
+    //Function to access the second color sensor's value
     public float color2() {
         Color.RGBToHSV((int) (sensorColor2.red() * SCALE_FACTOR),
             (int) (sensorColor2.green() * SCALE_FACTOR),
@@ -1247,7 +1247,7 @@ public class AutonMethods {
         return hsvValues2[0];
     }
     
-    //Function to acess the block read by the color sensors
+    //Function to access the block read by the color sensors
     public int block() {
         return block;
     }
