@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous
 
-public class ColorTestingRed extends OpMode {
+public class ColorTestingBlue extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DigitalChannel DigChannel;
     AutonMethods robot = new AutonMethods();
@@ -28,19 +28,18 @@ public class ColorTestingRed extends OpMode {
     
     @Override
     public void loop() {
-        robot.marker();
         switch (robot.counter) {
             case 0:
-                robot.motorsFast("front", 1250);
+                robot.motorsFast("front", 1200);
                 break;
             case 1:
                 robot.sleep(100);
                 break;
             case 2:
-                robot.checkBlocks("red");
+                robot.checkBlocks("blue");
                 break;
             case 3:
-                robot.getBlockAndFoundation("red");
+                robot.getBlockAndFoundation("blue");
                 break;
         }
         

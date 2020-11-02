@@ -42,7 +42,7 @@ public class AutonMethods {
     
     //Declare and initial variables
     private static DcMotor motorFL, motorBL, motorBR, motorFR, intakeFL, intakeFR, intakeM, intakeB;
-    private static Servo servoLS, servoRS, clamp;
+    private static Servo servoLS, servoRS, clamp, marker;
     private static ColorSensor sensorColor1, sensorColor2;
     private static DistanceSensor sensorDistance;
     HardwareMap map;
@@ -77,6 +77,7 @@ public class AutonMethods {
         sensorColor1 = map.get(ColorSensor.class, "sensorColor1");
         sensorColor2 = map.get(ColorSensor.class, "sensorColor2");
         sensorDistance = map.get(DistanceSensor.class, "sensorDistance");
+        marker = map.get(Servo.class, "marker");
         
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -263,6 +264,13 @@ public class AutonMethods {
             motorFR.setTargetPosition(0);
             motorBR.setTargetPosition(0);
             speed(0);
+        }
+        
+        else if (direction.equals("go")) {
+            motorFL.setTargetPosition(1000);
+            motorFR.setTargetPosition(1000);
+            motorFL.setPower(1);
+            motorBL.setPower(1);
         }
         
         changeRunMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -729,6 +737,11 @@ public class AutonMethods {
         counter++;
     }
     
+    //Function to raise or lower the clamp for the block
+    public void marker() {
+        marker.setPosition(.5);
+    }
+    
     //Function to find which block is black
     public void checkBlocks(String side) {
         Color.RGBToHSV((int) (sensorColor1.red() * SCALE_FACTOR),
@@ -991,64 +1004,64 @@ public class AutonMethods {
                         case 0:
                             servoLS.setPosition(.6);
                             servoRS.setPosition(.4);
-                            sleep(100);
+                            motorsFast("left", 800);
                             break;
                         case 1:
-                            motorsFast("front", 800);
+                            sleep(100);
                             break;
                         case 2:
-                            sleep(100);
+                            motorsFast("front", 1100);
                             break;
                         case 3:
-                            motorsFast("turn_left", 900);
+                            sleep(100);
                             break;
                         case 4:
-                            intake("in");
+                            motorsFast("turn_left", 350);
                             break;
                         case 5:
-                            sleep(100);
-                            stopAtDistance();
+                            intake("in");
                             break;
                         case 6:
-                            motorsFast("front", 550);
+                            sleep(100);
                             stopAtDistance();
                             break;
                         case 7:
-                            sleep(1000);
+                            motorsFast("front", 900);
                             stopAtDistance();
                             break;
                         case 8:
-                            intakeOff();
+                            sleep(1200);
+                            stopAtDistance();
                             break;
                         case 9:
-                            motorsFast("turn_right", 900);
+                            intakeOff();
                             break;
                         case 10:
-                            sleep(100);
+                            motorsFast("turn_right", 300);
                             break;
                         case 11:
-                            motorsFast("back", 700);
+                            sleep(100);
                             break;
                         case 12:
-                            sleep(100);
+                            motorsFast("back", 1500);
                             break;
                         case 13:
                             sleep(100);
                             break;
                         case 14:
-                            motorsFast("turn_left", 875);
+                            motorsFast("turn_left", 1000);
                             break;
                         case 15:
                             sleep(100);
                             break;
                         case 16:
-                            motorsFast("back", 3700);
+                            motorsFast("back", 4700);
                             break;
                         case 17:
                             sleep(100);
                             break;
                         case 18:
-                            motorsFast("turn_left", 750);
+                            motorsFast("turn_left", 850);
                             break;
                         case 19:
                             sleep(100);
@@ -1069,7 +1082,7 @@ public class AutonMethods {
                             sleep(100);
                             break;
                         case 25:
-                            motorsFast("front", 2000);
+                            motorsFast("front", 1800);
                             break;
                         case 26:
                             sleep(100);
@@ -1111,27 +1124,339 @@ public class AutonMethods {
                 case 1:
                     switch (blockCounter) {
                         case 0:
+                            servoLS.setPosition(.6);
+                            servoRS.setPosition(.4);
+                            intake("in");
                             break;
                         case 1:
-                            counter+=2;
+                            motorsFast("front", 500);
+                            stopAtDistance();
+                            break;
+                        case 2:
+                            sleep(100);
+                            stopAtDistance();
+                            break;
+                        case 3:
+                            motorsFast("turn_left", 400);
+                            stopAtDistance();
+                            break;
+                        case 4:
+                            sleep(100);
+                            stopAtDistance();
+                            break;
+                        case 5:
+                            motorsFast("front", 600);
+                            stopAtDistance();
+                            break;
+                        case 6:
+                            intakeOff();
+                            break;
+                        case 7:
+                            sleep(100);
+                            break;
+                        case 8:
+                            motorsFast("turn_right", 400);
+                            break;
+                        case 9:
+                            sleep(100);
+                            break;
+                        case 10:
+                            motorsFast("back", 900);
+                            break;
+                        case 11:
+                            sleep(100);
+                            break;
+                        case 12:
+                            motorsFast("turn_right", 880);
+                            break;
+                        case 13:
+                            sleep(100);
+                            break;
+                        case 14:
+                            motorsFast("back", 3300);
+                            break;
+                        case 15:
+                            sleep(100);
+                            break;
+                        case 16:
+                            motorsFast("turn_right", 1200);
+                            break;
+                        case 17:
+                            sleep(100);
+                            break;
+                        case 18:
+                            motorsFast("back", 1200);
+                            break;
+                        case 19:
+                            servoClamp();
+                            break;
+                        case 20:
+                            sleep(100);
+                            break;
+                        case 21:
+                            motorsFast("turn_left", 400);
+                            break;
+                        case 22:
+                            sleep(100);
+                            break;
+                        case 23:
+                            motorsFast("front", 2000);
+                            break;
+                        case 24:
+                            sleep(100);
+                            break;
+                        case 25:
+                            intake("in");
+                            break;
+                        case 26:
+                            motors("turn_left", 2000);
+                            break;
+                        case 27:
+                            servoClamp();
+                            break;
+                        case 28:
+                            sleep(100);
+                            break;
+                        case 29:
+                            motorsFast("back", 1900);
+                            break;
+                        case 30:
+                            sleep(100);
+                            break;
+                        case 31:
+                            intakeOff();
+                            break;
+                        case 32:
+                            motorsFast("front", 2500);
+                            break;
+                        case 33:
+                            motors("stop", 1000);
                             break;
                     }
                     break;
                 case 2:
                     switch (blockCounter) {
                         case 0:
+                            servoLS.setPosition(.6);
+                            servoRS.setPosition(.4);
+                            intake("in");
                             break;
                         case 1:
-                            counter+=2;
+                            motorsFast("front", 800);
+                            stopAtDistance();
+                            break;
+                        case 2:
+                            sleep(100);
+                            stopAtDistance();
+                            break;
+                        case 3:
+                            motorsFast("turn_right", 200);
+                            stopAtDistance();
+                            break;
+                        case 4:
+                            sleep(100);
+                            stopAtDistance();
+                            break;
+                        case 5:
+                            motors("front", 650);
+                            stopAtDistance();
+                            break;
+                        case 6:
+                            intakeOff();
+                            break;
+                        case 7:
+                            sleep(100);
+                            break;
+                        case 8:
+                            motorsFast("turn_left", 300);
+                            break;
+                        case 9:
+                            sleep(100);
+                            break;
+                        case 10:
+                            motorsFast("back", 1050);
+                            break;
+                        case 11:
+                            sleep(100);
+                            break;
+                        case 12:
+                            motorsFast("turn_right", 925);
+                            break;
+                        case 13:
+                            sleep(100);
+                            break;
+                        case 14:
+                            motorsFast("back", 3700);
+                            break;
+                        case 15:
+                            sleep(100);
+                            break;
+                        case 16:
+                            motorsFast("turn_right", 1400);
+                            break;
+                        case 17:
+                            sleep(100);
+                            break;
+                        case 18:
+                            motors("back", 1100);
+                            break;
+                        case 19:
+                            servoClamp();
+                            break;
+                        case 20:
+                            sleep(100);
+                            break;
+                        case 21:
+                            motorsFast("turn_left", 400);
+                            break;
+                        case 22:
+                            sleep(100);
+                            break;
+                        case 23:
+                            motorsFast("front", 2300);
+                            break;
+                        case 24:
+                            sleep(100);
+                            break;
+                        case 25:
+                            intake("in");
+                            break;
+                        case 26:
+                            motors("turn_left", 2000);
+                            break;
+                        case 27:
+                            servoClamp();
+                            break;
+                        case 28:
+                            sleep(100);
+                            break;
+                        case 29:
+                            motorsFast("back", 1700);
+                            break;
+                        case 30:
+                            sleep(100);
+                            break;
+                        case 31:
+                            intakeOff();
+                            break;
+                        case 32:
+                            motorsFast("front", 2500);
+                            break;
+                        case 33:
+                            motors("stop", 1000);
                             break;
                     }
                     break;
                 case 3:
                     switch (blockCounter) {
                         case 0:
+                            servoLS.setPosition(.6);
+                            servoRS.setPosition(.4);
+                            motorsFast("right", 800);
                             break;
                         case 1:
-                            counter+=2;
+                            sleep(100);
+                            break;
+                        case 2:
+                            intake("in");
+                            break;
+                        case 3:
+                            motorsFast("front", 1100);
+                            stopAtDistance();
+                            break;
+                        case 4:
+                            sleep(100);
+                            stopAtDistance();
+                            break;
+                        case 5:
+                            motorsFast("front", 400);
+                            stopAtDistance();
+                            break;
+                        case 6:
+                            sleep(600);
+                            stopAtDistance();
+                            break;
+                        case 7:
+                            sleep(600);
+                            stopAtDistance();
+                            break;
+                        case 8:
+                            intakeOff();
+                            break;
+                        case 9:
+                            sleep(100);
+                            break;
+                        case 10:
+                            motorsFast("back", 1300);
+                            break;
+                        case 11:
+                            sleep(100);
+                            break;
+                        case 12:
+                            motorsFast("turn_right", 1000);
+                            break;
+                        case 13:
+                            sleep(100);
+                            break;
+                        case 14:
+                            motorsFast("back", 4400);
+                            break;
+                        case 15:
+                            sleep(100);
+                            break;
+                        case 16:
+                            motorsFast("turn_right", 1400);
+                            break;
+                        case 17:
+                            sleep(100);
+                            break;
+                        case 18:
+                            motorsFast("back", 900);
+                            break;
+                        case 19:
+                            servoClamp();
+                            break;
+                        case 20:
+                            sleep(100);
+                            break;
+                        case 21:
+                            motorsFast("turn_left", 400);
+                            break;
+                        case 22:
+                            sleep(100);
+                            break;
+                        case 23:
+                            motorsFast("front", 2000);
+                            break;
+                        case 24:
+                            sleep(100);
+                            break;
+                        case 25:
+                            intake("in");
+                            break;
+                        case 26:
+                            motors("turn_left", 1800);
+                            break;
+                        case 27:
+                            servoClamp();
+                            break;
+                        case 28:
+                            sleep(100);
+                            break;
+                        case 29:
+                            motorsFast("back", 2400);
+                            break;
+                        case 30:
+                            sleep(100);
+                            break;
+                        case 31:
+                            intakeOff();
+                            break;
+                        case 32:
+                            motorsFast("front", 2300);
+                            break;
+                        case 33:
+                            motors("stop", 1000);
                             break;
                     }
                     break;
