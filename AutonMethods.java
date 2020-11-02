@@ -32,7 +32,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.Locale;
 import android.app.Activity;
-
+//hello there person scrollinng the internet
 public class AutonMethods {
     
     //Constructor
